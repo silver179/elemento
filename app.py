@@ -46,7 +46,7 @@ ZASADY KOMUNIKACJI:
 
 # Inicjalizacja modelu gemini-1.5-flash (najszybszy i najtańszy)[cite: 110].
 model = genai.GenerativeModel(
-    model_name='gemini-1.5-flash',
+    model_name='gemini-3.0-flash',
     system_instruction=SYSTEM_INSTRUCTION
 )
 
@@ -78,3 +78,4 @@ if prompt := st.chat_input("W czym mogę dzisiaj pomóc?"):
             except Exception as e:
                 # Obsługa błędów (Test Błędu)[cite: 102].
                 st.error("Przepraszam, wystąpił problem techniczny. Spokojnie, spróbuj ponownie za chwilę lub skontaktuj się z serwisem.")
+
