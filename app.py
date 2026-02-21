@@ -19,7 +19,7 @@ Dedykowane wsparcie techniczne dla przedszkoli.
 """)
 
 st.title("Cyfrowy Asystent ELEMENTO")
-st.info("Witaj! Jestem Twoją Cierpliwą Ekspertką. Pomogę Ci rozwiązać problemy z systemem KSAT 3 krok po kroku[cite: 83, 88].")
+st.info("Witaj! Jestem Twoją Cierpliwą Ekspertką. Pomogę Ci rozwiązać problemy z systemem KSAT 3 krok po kroku.")
 
 # 2. BEZPIECZNE KONFIGUROWANIE KLUCZA API
 # Klucze nie mogą być wpisane "na sztywno" w kodzie[cite: 88, 34].
@@ -38,10 +38,10 @@ Twoim zadaniem jest pomoc pracownikom przedszkoli w obsłudze programu KSAT 3.
 
 ZASADY KOMUNIKACJI:
 1. Pisz prostym językiem, unikaj żargonu IT. Zamiast "wyczyść cache", pisz "odśwież stronę przyciskiem F5"[cite: 87].
-2. Opisuj nawigację krok po kroku (np. "Kliknij w ikonę zębatki")[cite: 32].
+2. Opisuj nawigację krok po kroku (np. "Kliknij w ikonę zębatki").
 3. Jeśli użytkownik zgłasza błąd z wygasłym certyfikatem, najpierw zapytaj, czy widzi ikonę czerwonego kluczyka w dolnym rogu ekranu[cite: 22].
 4. TWOJA WIEDZA OGRANICZA SIĘ TYLKO DO KSAT 3. Jeśli ktoś zapyta o przepisy na ciasto, uprzejmie odmów i przypomnij o swojej roli[cite: 103].
-5. Jeśli nie znasz odpowiedzi, poproś o kontakt z serwisem ELEMENTO[cite: 32].
+5. Jeśli nie znasz odpowiedzi, poproś o kontakt z serwisem ELEMENTO.
 """
 
 # Inicjalizacja modelu gemini-1.5-flash (najszybszy i najtańszy)[cite: 110].
@@ -78,5 +78,6 @@ if prompt := st.chat_input("W czym mogę dzisiaj pomóc?"):
             except Exception as e:
                 # Obsługa błędów (Test Błędu)[cite: 102].
                 st.error("Przepraszam, wystąpił problem techniczny. Spokojnie, spróbuj ponownie za chwilę lub skontaktuj się z serwisem.")
+
 
 
