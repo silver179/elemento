@@ -1,15 +1,14 @@
 import streamlit as st
 import google.generativeai as genai
 
-# 1. KONFIGURACJA STRONY I BRANDING ELEMENTO
+# 1. KONFIGURACJA STRONY I BRANDING ELEMENTO [cite: 89]
 st.set_page_config(
     page_title="Asystent KSAT 3 - ELEMENTO", 
     page_icon="🏫",
     layout="centered"
 )
 
-# Sidebar z informacjami o firmie
-st.sidebar.image("https://via.placeholder.com/150?text=ELEMENTO") # Tutaj możesz wstawić logo ELEMENTO
+# Sidebar z informacjami o firmie [cite: 89, 112]
 st.sidebar.title("Wsparcie ELEMENTO")
 st.sidebar.markdown("""
 ### Cyfrowy Asystent KSAT 3
@@ -19,40 +18,38 @@ Dedykowane wsparcie techniczne dla placówek przedszkolnych.
 """)
 
 st.title("Cyfrowy Asystent ELEMENTO")
-st.info("Witaj! Jestem Twoją Cierpliwą Ekspertką. Pomogę Ci rozwiązać problemy z systemem KSAT 3 krok po kroku.")
+st.info("Witaj! Jestem Twoją Cierpliwą Ekspertką. Pomogę Ci rozwiązać problemy z systemem KSAT 3 krok po kroku.") [cite: 88]
 
-# 2. BEZPIECZNE KONFIGUROWANIE KLUCZA API (zgodnie z wymogiem st.secrets)
+# 2. BEZPIECZNE KONFIGUROWANIE KLUCZA API [cite: 88]
 try:
-    # Pobiera klucz z .streamlit/secrets.toml (lokalnie) lub z panelu Streamlit Cloud
+    # Pobiera klucz z .streamlit/secrets.toml lub ustawień Streamlit Cloud
     api_key = st.secrets["GOOGLE_API_KEY"]
     genai.configure(api_key=api_key)
 except Exception:
-    st.error("Błąd konfiguracji: Nie znaleziono klucza API. Upewnij się, że dodałeś GOOGLE_API_KEY do sekcji Secrets.")
+    st.error("Błąd konfiguracji: Brak klucza API w st.secrets. Dodaj klucz 'GOOGLE_API_KEY'.")
     st.stop()
 
-# 3. DEFINICJA SYSTEM PROMPTU (Logika "Cierpliwej Ekspertki")
+# 3. DEFINICJA SYSTEM PROMPTU (Logika "Cierpliwej Ekspertki") [cite: 32, 88]
 SYSTEM_INSTRUCTION = """
-Jesteś "Cierpliwą Ekspertką" – asystentką wsparcia technicznego firmy ELEMENTO. 
-Twoim zadaniem jest pomoc pracownikom przedszkoli (osobom nietechnicznym) w obsłudze programu KSAT 3.
+Jesteś "Cierpliwą Ekspertką" – asystentką wsparcia technicznego firmy ELEMENTO. [cite: 88]
+Twoim zadaniem jest pomoc pracownikom przedszkoli (osobom nietechnicznym) w obsłudze programu KSAT 3. [cite: 82, 83]
 
 ZASADY KOMUNIKACJI:
-1. Pisz prostym językiem, unikaj żargonu IT. Zamiast "wyczyść cache", pisz "odśwież stronę przyciskiem F5".
-2. Jeśli rozwiązanie wymaga nawigacji, opisz ją krok po kroku (np. "Kliknij w ikonę zębatki").
-3. Bądź empatyczna i uspokajaj użytkownika.
-4. TWOJA WIEDZA OGRANICZA SIĘ TYLKO DO KSAT 3. Jeśli ktoś zapyta o inne rzeczy (np. przepis na ciasto), 
-   uprzejmie odmów i przypomnij, że służysz wyłącznie do pomocy w KSAT 3.
-5. Jeśli użytkownik zgłasza błąd z wygasłym certyfikatem, najpierw zapytaj, czy widzi ikonę 
-   czerwonego kluczyka w dolnym rogu ekranu.
-6. Jeśli nie znasz odpowiedzi, poproś o kontakt z serwisem ELEMENTO.
+1. Pisz prostym językiem, unikaj żargonu IT. Zamiast "wyczyść cache", pisz "odśwież stronę przyciskiem F5". [cite: 32, 87]
+2. Jeśli rozwiązanie wymaga nawigacji, opisz ją krok po kroku. [cite: 32, 101]
+3. Bądź empatyczna i uspokajaj użytkownika w sytuacjach stresowych. [cite: 88, 102]
+4. Jeśli użytkownik zgłasza błąd z wygasłym certyfikatem, najpierw zapytaj, czy widzi ikonę czerwonego kluczyka w dolnym rogu ekranu. [cite: 22]
+5. TWOJA WIEDZA OGRANICZA SIĘ TYLKO DO KSAT 3. Jeśli ktoś zapyta o inne rzeczy (np. przepis na ciasto), uprzejmie odmów i przypomnij, że służysz wyłącznie do pomocy w KSAT 3. 
+6. Jeśli nie znasz odpowiedzi, poproś o kontakt z serwisem ELEMENTO. [cite: 32]
 """
 
-# Inicjalizacja modelu gemini-1.5-flash
+# Inicjalizacja modelu gemini-1.5-flash [cite: 110]
 model = genai.GenerativeModel(
     model_name='gemini-1.5-flash',
     system_instruction=SYSTEM_INSTRUCTION
 )
 
-# 4. ZARZĄDZANIE HISTORIĄ CZATU (Streamlit Chat Elements)
+# 4. ZARZĄDZANIE HISTORIĄ CZATU (Dymki czatu) [cite: 111]
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -61,24 +58,19 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 5. OBSŁUGA ZAPYTAŃ UŻYTKOWNIKA
+# 5. OBSŁUGA ZAPYTAŃ UŻYTKOWNIKA [cite: 54, 58]
 if prompt := st.chat_input("W czym mogę dzisiaj pomóc?"):
-    # Dodanie pytania użytkownika do historii
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # Generowanie odpowiedzi asystenta
     with st.chat_message("assistant"):
         with st.spinner("Przeszukuję instrukcje ELEMENTO..."):
             try:
-                # Wysłanie zapytania do modelu
                 response = model.generate_content(prompt)
                 full_response = response.text
                 
                 st.markdown(full_response)
-                # Dodanie odpowiedzi do historii
                 st.session_state.messages.append({"role": "assistant", "content": full_response})
             except Exception as e:
-                st.error(f"Wystąpił problem techniczny. Prosimy o kontakt z serwisem ELEMENTO.")
-                print(f"Błąd: {e}")
+                st.error("Wystąpił problem techniczny. Prosimy o kontakt z serwisem ELEMENTO.")
